@@ -1,0 +1,59 @@
+site_name: 嵌入式系统化教程
+site_description: 从 MCU 裸机到 RTOS、嵌入式 Linux、物联网与工程实践的体系化教程
+site_author: Embedded Tutorial
+docs_dir: knowledge
+
+theme:
+  name: material
+  language: zh
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.indexes
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - toc.follow
+  palette:
+    - scheme: default
+      primary: blue grey
+      accent: teal
+    - scheme: slate
+      primary: blue grey
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: 切换主题
+
+plugins:
+  - search:
+      lang:
+        - zh
+        - en
+  - awesome-pages:
+      filename: .pages
+      strict: false
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.inlinehilite
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true

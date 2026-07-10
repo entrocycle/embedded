@@ -1,0 +1,9 @@
+title: 02 MCU 裸机
+nav:
+  - index.md
+  - mcu-startup.md
+  - clock-interrupt-dma.md
+  - peripheral-driver.md
+  - sensor-actuator.md
+  - bootloader-ota.md
+  - low-power.md

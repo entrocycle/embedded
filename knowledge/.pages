@@ -1,0 +1,13 @@
+nav:
+  - index.md
+  - 00-learning-path
+  - 01-foundations
+  - 02-mcu-baremetal
+  - 03-rtos
+  - 04-embedded-linux
+  - 05-network-iot
+  - 06-debug-optimization
+  - 07-architecture-projects
+  - 08-career-interview
+  - 09-trends-advanced
+  - resources

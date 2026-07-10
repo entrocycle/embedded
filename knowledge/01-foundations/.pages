@@ -1,0 +1,7 @@
+title: 01 基础能力
+nav:
+  - index.md
+  - c-language-memory.md
+  - compile-link-firmware.md
+  - hardware-basics.md
+  - datasheet-schematic-method.md
