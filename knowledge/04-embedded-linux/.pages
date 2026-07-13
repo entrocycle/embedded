@@ -1,7 +1,8 @@
 title: 04 嵌入式 Linux
 nav:
   - index.md
+  - linux-development-workflow.md
   - linux-system.md
-  - linux-driver-model.md
   - bsp-rootfs-build.md
+  - linux-driver-model.md
   - userspace-service.md

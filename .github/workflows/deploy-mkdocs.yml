@@ -41,6 +41,9 @@ jobs:
       - name: Build MkDocs site
         run: mkdocs build --strict
 
+      - name: Run host labs
+        run: make -C labs test
+
       - name: Upload artifact
         if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3

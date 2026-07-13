@@ -1,5 +1,5 @@
 site_name: 嵌入式系统化教程
-site_description: 从 MCU 裸机到 RTOS、嵌入式 Linux、物联网与工程实践的体系化教程
+site_description: 从 MCU 裸机到 RTOS、嵌入式 Linux、物联网与工程实践的深度体系化教程
 site_author: Embedded Tutorial
 docs_dir: knowledge
 
@@ -22,12 +22,15 @@ theme:
     - scheme: default
       primary: blue grey
       accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: 切换至深色模式
     - scheme: slate
       primary: blue grey
       accent: teal
       toggle:
         icon: material/brightness-4
-        name: 切换主题
+        name: 切换至浅色模式
 
 plugins:
   - search:
@@ -36,7 +39,7 @@ plugins:
         - en
   - awesome-pages:
       filename: .pages
-      strict: false
+      strict: true
 
 markdown_extensions:
   - admonition

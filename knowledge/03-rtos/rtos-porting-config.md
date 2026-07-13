@@ -2,6 +2,14 @@
 
 会创建任务不等于会用 RTOS。工程项目里更关键的是：内核如何和 MCU 启动、中断、SysTick、堆栈、临界区、低功耗和调试工具接起来。
 
+## 本章任务与边界
+
+完成本章后，你应能说明端口如何保存上下文、产生 tick、屏蔽中断和初始化任务栈，核对中断优先级编码、heap/静态内存、hook 与 tickless 配置，并通过断言、寄存器和 trace 验证移植。
+
+本章以 Cortex-M/FreeRTOS 常见模型说明问题。`configPRIO_BITS`、`configMAX_SYSCALL_INTERRUPT_PRIORITY`、PendSV/SysTick 选择和低功耗补偿必须与芯片 CMSIS、端口源码和实际内核版本一致；复制其他板卡配置具有高风险。
+
+完成证据：端口版本与配置清单、IRQ 优先级审计、首个任务切换 trace、栈/heap 失败钩子测试，以及 tickless 前后的时间和功耗对比。
+
 ## 移植边界
 
 RTOS 移植通常包含：
@@ -68,13 +76,49 @@ RTOS 下中断分两类：
 - ISR 中忘记请求任务切换。
 - 任务和 ISR 共享数据没有同步。
 
+以实现 4 个优先级位的 Cortex-M4 为例，可用的库优先级数值是 `0..15`，数值越小，逻辑优先级越高。假设约定：
+
+```c
+#define configPRIO_BITS                                4
+#define configLIBRARY_LOWEST_INTERRUPT_PRIORITY       15
+#define configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY   5
+
+#define configKERNEL_INTERRUPT_PRIORITY \
+    (configLIBRARY_LOWEST_INTERRUPT_PRIORITY << (8 - configPRIO_BITS))
+
+#define configMAX_SYSCALL_INTERRUPT_PRIORITY \
+    (configLIBRARY_MAX_SYSCALL_INTERRUPT_PRIORITY << (8 - configPRIO_BITS))
+```
+
+此时：
+
+```text
+库/CMSIS 优先级 0..4  -> 高于 RTOS 系统调用边界，不能调用任何 FreeRTOS API
+库/CMSIS 优先级 5..15 -> 可以调用允许的 FromISR API
+
+写入 NVIC 寄存器的编码值：
+5  -> 0x50
+15 -> 0xF0
+```
+
+CMSIS 的 `NVIC_SetPriority()` 接收未左移的库优先级，内部会完成编码：
+
+```c
+NVIC_SetPriority(MOTOR_FAULT_IRQn, 2);  /* 不调用 RTOS API */
+NVIC_SetPriority(UART_DMA_IRQn, 6);     /* 可以调用 FromISR API */
+```
+
+不要把 `0x60` 传给 `NVIC_SetPriority()`；只有直接写 NVIC 优先级寄存器时才使用移位后的编码值。项目还要核对 `__NVIC_PRIO_BITS` 与 `configPRIO_BITS` 一致，并配置为所有已实现位都用于抢占优先级、没有子优先级。不同厂商对 priority group 的命名不同，应验证最终寄存器值，而不是照抄组号。
+
+`configMAX_SYSCALL_INTERRUPT_PRIORITY` 不能为 0。开启 `configASSERT` 后，FreeRTOS Cortex-M 端口可在 FromISR API 路径检查非法中断优先级；建议故意把测试 IRQ 配成优先级 4 并调用 FromISR API，确认断言确实触发，再恢复正确配置。
+
 建议写一份项目中断表：
 
-| IRQ | 用途 | 优先级 | 是否调用 RTOS API | 最大耗时 |
-|---|---|---:|---|---:|
-| SysTick | 系统节拍 | 低 | 是 | 短 |
-| UART DMA idle | 串口接收 | 中 | 是 | 短 |
-| Motor fault | 保护 | 高 | 否 | 极短 |
+| IRQ | 用途 | CMSIS 数值 | 寄存器编码 | 是否调用 RTOS API | 最大耗时 |
+|---|---|---:|---:|---|---:|
+| SysTick | 系统节拍 | 15 | `0xF0` | 内核使用 | 短 |
+| UART DMA idle | 串口接收 | 6 | `0x60` | 是 | 短 |
+| Motor fault | 保护 | 2 | `0x20` | 否 | 极短 |
 
 ## 内存管理
 
@@ -167,3 +211,21 @@ tickless idle 的基本思路：
 1. 新建一个最小 FreeRTOS 工程，记录启动到第一个任务运行的调用链。
 2. 故意把任务栈调小，验证栈溢出 hook 是否触发。
 3. 建立项目 IRQ 表，标注哪些中断允许调用 RTOS API。
+
+## 深入思考
+
+RTOS 移植和配置的难点，不是把内核源码加入工程，而是让 CPU 异常机制、中断优先级、系统 tick、内存管理和调试钩子形成一致的运行契约。配置项如果只照抄例程，很容易埋下偶发死机、API 误用、低功耗失败和难以定位的栈问题。
+
+移植时重点验证：
+
+- PendSV、SysTick、SVC 的优先级是否符合端口要求。
+- 允许调用 RTOS API 的中断优先级边界是否被所有驱动遵守。
+- heap、任务栈、中断栈和链接脚本中的 RAM 区域是否一致。
+- tick 中断、低功耗 tickless 和唤醒源是否共享同一时间假设。
+- assert、malloc failed hook、stack overflow hook、trace 和任务列表是否在调试版本中可用。
+
+开放问题：
+
+1. 为什么某个 ISR 优先级过高时，调用 `FromISR` API 仍可能破坏内核？
+2. tickless 低功耗为什么会影响软件定时器、超时等待和时间戳？
+3. 如果 release 版本关闭了 assert 和栈检查，现场偶发死机的证据链会缺失什么？

@@ -2,5 +2,6 @@ title: 05 网络与 IoT
 nav:
   - index.md
   - iot-protocols.md
+  - application-protocol-design.md
   - connectivity-state-machine.md
   - iot-security.md

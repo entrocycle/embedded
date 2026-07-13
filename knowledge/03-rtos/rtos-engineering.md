@@ -2,6 +2,14 @@
 
 RTOS 项目真正的难点在工程边界：任务怎么拆、优先级怎么定、共享资源怎么管、故障怎么恢复、长稳怎么验证。
 
+## 本章任务与边界
+
+完成本章后，你应能从业务 deadline、阻塞行为和资源所有权推导任务结构，建立心跳、日志、内存和长稳策略，并证明系统在过载、外设超时、任务卡死和资源耗尽时可诊断地收敛。
+
+本章不提供适用于所有系统的固定优先级和任务数量。看门狗、队列和服务任务都可能隐藏故障或产生瓶颈，必须结合目标负载、trace 和资源趋势评审。
+
+完成证据：正常/压力两套任务指标、阻塞链、三项故障注入、长稳趋势报告和一份 RTOS 化前后对比。若没有可测改善，应重新检查是否只是把裸机阻塞迁入多个任务。
+
 ## 任务拆分原则
 
 不要按“代码文件”拆任务，要按执行特征拆。
@@ -96,22 +104,54 @@ typedef enum {
     HB_COUNT
 } heartbeat_id_t;
 
-static volatile uint32_t heartbeat[HB_COUNT];
+typedef struct {
+    TickType_t last_progress;
+    TickType_t max_silence;
+    bool seen;
+} heartbeat_t;
+
+static heartbeat_t heartbeat[HB_COUNT] = {
+    [HB_SENSOR]  = { .max_silence = pdMS_TO_TICKS(1500) },
+    [HB_NET]     = { .max_silence = pdMS_TO_TICKS(5000) },
+    [HB_CONTROL] = { .max_silence = pdMS_TO_TICKS(100) },
+    [HB_STORAGE] = { .max_silence = pdMS_TO_TICKS(10000) },
+};
 
 void heartbeat_kick(heartbeat_id_t id)
 {
-    heartbeat[id]++;
+    TickType_t now = xTaskGetTickCount();
+
+    taskENTER_CRITICAL();
+    heartbeat[id].last_progress = now;
+    heartbeat[id].seen = true;
+    taskEXIT_CRITICAL();
+}
+
+static bool heartbeat_is_healthy(heartbeat_id_t id, TickType_t now)
+{
+    heartbeat_t snapshot;
+
+    taskENTER_CRITICAL();
+    snapshot = heartbeat[id];
+    taskEXIT_CRITICAL();
+
+    return snapshot.seen &&
+           (TickType_t)(now - snapshot.last_progress) <= snapshot.max_silence;
 }
 ```
 
-watchdog_task 周期检查：
+`heartbeat_kick()` 只能由任务上下文调用；若确实要记录 ISR 活性，应设计单独的 `FromISR` 路径，而不是在 ISR 中使用任务临界区 API。`TickType_t` 的无符号减法可以跨 tick 回绕计算间隔，但 `max_silence` 必须远小于 tick 类型的整个计数范围。
+
+每个心跳 ID 只能有一个明确的拥有者。任务应在完成一次有意义的工作后 kick，例如“采样成功或已按策略处理采样错误并释放总线”，不能在循环入口、空转路径或定时器 ISR 中无条件 kick。否则任务虽然仍被调度，业务状态机、外设或输出链路已经卡死时，看门狗仍会被错误喂养。
+
+`watchdog_task` 周期读取受保护的快照，并按每个任务自己的 `max_silence` 判断：
 
 - 关键任务心跳是否变化。
 - 队列是否长期满。
 - heap 是否低于阈值。
 - 错误计数是否异常。
 
-只有系统健康才喂狗。
+只有所有关键任务都在各自窗口内推进、资源指标也健康时才喂狗。启动阶段应有明确宽限期；进入 OTA、低功耗或维护模式时，应切换一套经过设计的健康规则，而不是临时放宽到无限。发现超时后先保存缺失任务、tick、队列深度和锁状态，再进入安全态或停止喂狗。
 
 ## 队列满怎么办
 
@@ -204,3 +244,17 @@ task -> log_queue -> logger_task -> UART/RTT/File
 1. 为环境监测节点画出任务图、队列图和优先级表。
 2. 设计日志队列满时的降级策略。
 3. 写一个 watchdog_task 伪代码，只有关键任务心跳正常才喂狗。
+
+## 工程洞察
+
+RTOS 工程实践的核心，是把“能跑的多任务程序”升级为“可诊断、可恢复、可维护的实时系统”。任务拆分、优先级、队列深度、日志和看门狗都不是孤立配置，它们共同决定系统在压力下如何失败。
+
+几个关键原则：
+
+- 任务不是按代码文件划分，而是按时序需求、阻塞行为和资源所有权划分。
+- 优先级不是按模块重要性排序，而是按截止期、唤醒频率、阻塞关系和恢复策略评审。
+- 队列不是无限缓冲，而是业务语义的边界：满时是丢弃、覆盖、阻塞、降级还是持久化。
+- 看门狗不是“定时喂狗”，而是对关键任务健康状态的独立评估。
+- 日志不是越多越好，它必须限速、分级、可关闭，并避免改变实时路径。
+
+一个实用的评审问题是：当网络断开、传感器超时、日志队列满、低优先级任务持锁时，高优先级控制任务还能否满足截止期？如果不能，系统应如何进入可解释的降级状态？

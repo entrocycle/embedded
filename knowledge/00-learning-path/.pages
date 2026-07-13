@@ -1,6 +1,12 @@
 title: 00 学习路线
 nav:
   - index.md
-  - deep-learning-method.md
-  - competency-matrix.md
+  - course-map.md
   - environment.md
+  - labs-map.md
+  - host-config-journal.md
+  - depth-contract.md
+  - deep-learning-method.md
+  - system-thinking.md
+  - competency-matrix.md
+  - tutorial-quality-matrix.md

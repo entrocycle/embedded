@@ -1,73 +1,138 @@
 # 嵌入式系统化教程
 
-这是一套面向工程实践的嵌入式教程。它把嵌入式学习拆成十个层次：学习路线、基础能力、MCU 裸机、RTOS、嵌入式 Linux、网络物联网、调试优化、项目架构、职业面试、进阶专题与资源索引。
+这是一套以工程能力为目标的嵌入式课程。它不要求所有读者把所有章节线性读完，而是先建立共同基础，再进入 MCU/RTOS 或 Embedded Linux/BSP 路线，并在网络、安全、架构、发布和现场维护中形成完整产品能力。
 
-## 知识结构
+教程的完成标准不是“看过多少知识点”，而是能否独立完成下面的闭环：
 
 ```text
-应用与产品
-  ↑
-项目架构 / 工程管理 / 量产维护
-  ↑
-调试优化 / 可靠性 / 性能功耗
-  ↑
-网络协议 / IoT / OTA / 安全
-  ↑
-RTOS / Embedded Linux
-  ↑
-MCU / 启动流程 / 外设驱动
-  ↑
-C 语言 / 编译链接 / 硬件基础
+定义目标与约束
+  -> 建立资源、时间、状态和故障模型
+  -> 实现最小主路径
+  -> 用日志、寄存器、波形、trace 或测试取得证据
+  -> 注入失败并验证恢复
+  -> 比较方案并记录取舍
+  -> 把结论沉淀为测试、接口、诊断和发布资产
 ```
 
-## 目录入口
+## 从这里开始
 
-- [00 学习路线](00-learning-path/index.md)：明确方向、阶段目标和环境准备。
-- [01 基础能力](01-foundations/index.md)：C、内存、编译链接、计算机与硬件基础。
-- [02 MCU 裸机](02-mcu-baremetal/index.md)：从启动文件、外设驱动到 Bootloader、OTA 和低功耗。
-- [03 RTOS](03-rtos/index.md)：任务、调度、同步、移植和工程使用。
-- [04 嵌入式 Linux](04-embedded-linux/index.md)：U-Boot、Kernel、设备树、驱动模型、RootFS。
-- [05 网络与 IoT](05-network-iot/index.md)：串口、CAN、TCP/IP、MQTT、BLE、LoRa、OTA、安全。
-- [06 调试与优化](06-debug-optimization/index.md)：JTAG/SWD、GDB、示波器、性能功耗、故障案例。
-- [07 架构与项目](07-architecture-projects/index.md)：BSP、模块化、项目实战、CI、量产发布。
-- [08 职业与面试](08-career-interview/index.md)：知识清单、面试题库、简历项目表达。
-- [09 进阶专题](09-trends-advanced/index.md)：存储文件系统、GUI、TinyML、安全与可靠性。
-- [资源索引](resources/index.md)：书籍、工具、社区和资料管理方法。
+第一次使用本教程，按下面顺序进入：
 
-## 核心新增专题
+1. [课程依赖地图与阶段门](00-learning-path/course-map.md)：选择路线，了解必修、选修和阶段出口。
+2. [嵌入式工程环境准备](00-learning-path/environment.md)：完成第一个 90 分钟可复现闭环。
+3. [实验地图](00-learning-path/labs-map.md)：从主机模型逐步推进到目标板和系统证据。
+4. [基础能力](01-foundations/index.md)：建立 C、内存、CPU、构建和硬件阅读共同基础。
+5. 选择 [MCU/RTOS](02-mcu-baremetal/index.md) 或 [Embedded Linux/BSP](04-embedded-linux/index.md) 作为第一条主线。
 
-- [嵌入式能力矩阵](00-learning-path/competency-matrix.md)
-- [如何把本教程学深](00-learning-path/deep-learning-method.md)
-- [数据手册与原理图阅读方法](01-foundations/datasheet-schematic-method.md)
-- [时钟、中断与 DMA](02-mcu-baremetal/clock-interrupt-dma.md)
-- [传感器与执行器](02-mcu-baremetal/sensor-actuator.md)
-- [硬件基础与数据手册阅读](01-foundations/hardware-basics.md)
-- [Bootloader 与 OTA 基础](02-mcu-baremetal/bootloader-ota.md)
-- [低功耗设计](02-mcu-baremetal/low-power.md)
-- [RTOS 移植与配置](03-rtos/rtos-porting-config.md)
-- [RTOS 工程实践](03-rtos/rtos-engineering.md)
-- [Linux 驱动模型与调试](04-embedded-linux/linux-driver-model.md)
-- [BSP、RootFS 与系统构建](04-embedded-linux/bsp-rootfs-build.md)
-- [用户态服务与系统集成](04-embedded-linux/userspace-service.md)
-- [连接状态机与弱网设计](05-network-iot/connectivity-state-machine.md)
-- [IoT 安全与设备生命周期](05-network-iot/iot-security.md)
-- [现场诊断与可观测性](06-debug-optimization/field-diagnostics.md)
-- [典型故障案例库](06-debug-optimization/fault-cases.md)
-- [项目阶梯](07-architecture-projects/project-ladder.md)
-- [工具链、构建与 CI](07-architecture-projects/toolchain-ci.md)
-- [量产、测试与发布](07-architecture-projects/production-release.md)
-- [岗位路线与能力准备](08-career-interview/role-roadmap.md)
-- [面试题库](08-career-interview/question-bank.md)
-- [中间件、存储与文件系统](09-trends-advanced/middleware-storage-filesystem.md)
-- [图形界面：LVGL 与 Qt](09-trends-advanced/gui-lvgl-qt.md)
-- [Edge AI 与 TinyML](09-trends-advanced/edge-ai-tinyml.md)
-- [安全、可靠性与功能安全入门](09-trends-advanced/safety-reliability.md)
+有经验的读者不必从头开始。直接挑战课程地图中的阶段门，对失败项定向回补；是否能跳过由证据决定，而不是由“以前看过”决定。
 
-## 学习原则
+## 课程架构
 
-- 不把“会调库”当作“会嵌入式”。真正的能力来自理解启动、内存、时钟、中断、外设、调度和系统边界。
-- 不把“裸机”和“RTOS/Linux”割裂。裸机训练硬件控制，RTOS 训练并发和实时性，Linux 训练系统集成和驱动模型。
-- 不只学 API。每个 API 背后都要追问：它访问了什么寄存器、消耗了什么资源、失败时会发生什么、怎么定位问题。
-- 不脱离项目。每一层知识最终都要落到可运行、可调试、可维护的工程上。
-- 不只追求跑通。产品化还要考虑安全、OTA、低功耗、产测、发布、回滚和现场诊断。
-- 不只接受结论。每章都要追问“证据是什么、还有什么方案、失败后如何恢复、换平台后哪些结论仍成立”。
+```text
+                                  +-> MCU 裸机 -> RTOS ---------+
+学习方法 -> 共同基础 -------------+                               |
+            C / CPU / 构建 / 硬件 +-> Embedded Linux / BSP -----+-> 产品工程
+                                  |                               |
+                                  +-> 网络 / 存储 / 安全 / OTA ---+
+
+贯穿全程：调试、测试、可靠性、功耗、可观测性、工具链和工程表达
+```
+
+### 共同基础
+
+[01 基础能力](01-foundations/index.md) 不是“入门语法”，而是两条系统路线共用的推理底座。读者需要能从 C 对象追到 ELF 和内存，从寄存器访问追到 CPU 与总线，从软件现象追到原理图、数据手册和物理信号。
+
+### MCU/RTOS 路线
+
+[02 MCU 裸机](02-mcu-baremetal/index.md) 建立启动、时钟、中断、外设和直接硬件控制能力；[03 RTOS](03-rtos/index.md) 在此基础上训练调度、并发、实时性和资源管理。适合固件、工业控制、低功耗和 MCU IoT 方向。
+
+### Embedded Linux/BSP 路线
+
+[04 嵌入式 Linux](04-embedded-linux/index.md) 从启动链、设备树和驱动模型推进到 RootFS、用户态服务与系统发布。它与 RTOS 共享共同基础，但不是 RTOS 的必然后续。适合 BSP、内核驱动、网关、HMI 和边缘设备方向。
+
+### 产品整合路线
+
+[05 网络与 IoT](05-network-iot/index.md)、[06 调试与验证](06-debug-optimization/index.md) 和 [07 架构与项目](07-architecture-projects/index.md) 把底层能力推进到弱网、安全、OTA、CI、量产、发布与现场维护。这里是“功能能跑”与“产品可交付”的分界。
+
+### 方向拓展
+
+[09 进阶专题](09-trends-advanced/index.md) 覆盖存储文件系统、GUI、TinyML 和可靠性等专题。它们按项目需求选择，不应在主线能力尚未形成时成为新的知识负担。
+
+## 模块入口与完成证据
+
+| 模块 | 新增的主导问题 | 最低完成证据 |
+|---|---|---|
+| [00 学习路线](00-learning-path/index.md) | 如何学习、验证和选择路径 | 路线选择、环境记录、第一份证据包 |
+| [01 基础能力](01-foundations/index.md) | 程序如何映射到机器和硬件 | 对象/段分析、反汇编、手册与原理图笔记 |
+| [02 MCU 裸机](02-mcu-baremetal/index.md) | CPU 如何启动并控制真实外设 | 启动日志、map、寄存器、总线波形和故障记录 |
+| [03 RTOS](03-rtos/index.md) | 多个上下文如何确定性协作 | 任务表、阻塞链、栈水位、调度和队列满证据 |
+| [04 Embedded Linux](04-embedded-linux/index.md) | 完整系统如何启动、绑定设备和运行服务 | 启动标注、DTS 运行时验证、驱动和服务证据 |
+| [05 网络与 IoT](05-network-iot/index.md) | 外部世界不可靠时如何保持本地可控 | 状态机、抓包、弱网矩阵、幂等和 OTA 设计 |
+| [06 调试与验证](06-debug-optimization/index.md) | 如何把症状变成可复核结论 | 假设表、原始证据、故障注入、回归和复盘 |
+| [07 架构与项目](07-architecture-projects/index.md) | 如何管理变化、交付和生命周期 | 架构、预算、CI、发布包、产测和现场诊断 |
+| [08 职业与面试](08-career-interview/index.md) | 如何证明而不是包装能力 | 项目证据包、岗位差距、结构化问题复盘 |
+| [09 进阶专题](09-trends-advanced/index.md) | 如何在新约束下扩展系统 | 专题设计、资源预算、风险和主项目集成 |
+
+## 教程的质量标准
+
+整套教程以仓库根目录的 [质量标准与建设方法](https://github.com/entrocycle/embedded/blob/main/criteria.md) 为上位质量合同。站内配套页面包括：
+
+- [深度教程契约](00-learning-path/depth-contract.md)：什么叫从知识走向判断。
+- [系统思维](00-learning-path/system-thinking.md)：如何从目标、约束和假设建立证据链。
+- [深度学习方法](00-learning-path/deep-learning-method.md)：每章应采取哪些学习动作。
+- [能力矩阵](00-learning-path/competency-matrix.md)：不同层级和岗位需要哪些能力。
+- [教程质量矩阵](00-learning-path/tutorial-quality-matrix.md)：如何评审章节与项目。
+
+教程遵守四条底线：
+
+1. **正确性有边界**：区分标准保证、平台保证、经验建议和示意代码。
+2. **实践可复现**：核心主张必须有实验、分析或权威资料支持。
+3. **结论有证据**：说明当前证据能证明什么，不能证明什么。
+4. **失败可讨论**：覆盖检测、隔离、恢复、降级和残余风险。
+
+## 学习闭环
+
+每个学习单元都建议留下六类产物中的至少三类：
+
+| 产物 | 训练能力 | 例子 |
+|---|---|---|
+| 机制模型 | 从现象回到因果 | 启动链、状态机、buffer 所有权图 |
+| 定量预算 | 发现资源和时间边界 | 栈、队列、Flash 寿命、平均电流 |
+| 原始证据 | 建立可复核结论 | map、波形、寄存器、trace、抓包 |
+| 故障矩阵 | 设计失败与恢复 | 超时、断电、队列满、CRC 错、弱网 |
+| 决策记录 | 解释选择与代价 | 轮询/中断/DMA、单区/A-B、内核/用户态 |
+| 迁移复盘 | 提取不变量 | 换芯片、换 RTOS、换网络、负载扩大 |
+
+完成一章时，尝试写出：
+
+```text
+在约束 C 下，根据证据 E，我选择方案 S；
+它优化了 O，代价是 T，残余风险是 R；
+当条件 X 变化时，需要重新评审。
+```
+
+如果目前只能描述 API 和成功现象，应先补实验与故障路径，而不是急着进入下一章。
+
+## 项目主线
+
+[项目阶梯](07-architecture-projects/project-ladder.md) 让能力逐层叠加：
+
+```text
+P0 最小系统
+ -> P1 传感器采集与控制
+ -> P2 RTOS 节点或 Linux 基础系统
+ -> P3 联网与弱网恢复
+ -> P4 配置、存储与 OTA
+ -> P5 Linux 网关或多节点系统
+ -> P6 可构建、可量产、可升级、可诊断的产品闭环
+```
+
+后一个项目必须保留前一个项目的不变量和诊断能力。加入网络不能丢掉实时性，加入 RTOS 不能丢掉启动可解释性，加入 OTA 不能破坏配置兼容和回滚，进入量产不能失去源码与固件的可追溯关系。
+
+## 参考资源
+
+- [资源索引](resources/index.md)：如何选择书籍、工具、官方文档和社区资料。
+- [文档模板](doc-templates/index.md)：新增教程和项目时使用的质量骨架。
+- [职业与面试](08-career-interview/index.md)：把真实工程证据转化为岗位能力表达。
+
+教程地图帮助你决定下一步去哪里；阶段门和证据决定你是否真的可以继续。

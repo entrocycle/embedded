@@ -4,6 +4,7 @@ nav:
   - mcu-startup.md
   - clock-interrupt-dma.md
   - peripheral-driver.md
+  - baremetal-architecture.md
   - sensor-actuator.md
-  - bootloader-ota.md
   - low-power.md
+  - bootloader-ota.md

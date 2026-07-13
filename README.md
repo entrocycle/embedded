@@ -1,113 +1,125 @@
 # 嵌入式系统化教程
 
-> 面向嵌入式软件工程师的体系化学习教程：从 C 语言、MCU 裸机、外设驱动、RTOS、嵌入式 Linux、网络物联网，到调试优化、项目架构与面试成长。
+这是一套以真实工程能力为目标的嵌入式教程。内容从 C、CPU、内存、编译链接和硬件阅读出发，分为 MCU/RTOS 与 Embedded Linux/BSP 两条系统路线，最终在网络、安全、OTA、调试验证、架构、CI、量产和现场维护中汇合。
 
-## 适合谁
+教程不以“覆盖了多少知识点”为完成标准，而要求读者能够：
 
-- 刚开始学习嵌入式，希望有完整路径的新手。
-- 已会单片机点灯，但对驱动、RTOS、Linux、网络缺乏体系的人。
-- 从应用软件转嵌入式，需要快速建立硬件、系统、工具链认知的人。
-- 准备嵌入式软件、BSP、驱动、IoT、边缘 AI 相关岗位的人。
+- 从源码、ELF、运行时、寄存器和物理信号互相解释系统行为。
+- 把需求改写为约束、指标、不变量和可复核证据。
+- 设计实验区分竞争假设，而不是凭经验不断试参数。
+- 处理边界、过载、断电、弱网、版本和资源耗尽。
+- 在性能、功耗、成本、复杂度、安全和可靠性之间做取舍。
+- 将结论沉淀为接口、测试、诊断、构建与发布资产。
 
-## 课程地图
+## 从这里开始
+
+1. 阅读 [课程依赖地图与阶段门](knowledge/00-learning-path/course-map.md)。
+2. 完成 [嵌入式工程环境准备](knowledge/00-learning-path/environment.md) 的 90 分钟闭环。
+3. 按 [实验地图](knowledge/00-learning-path/labs-map.md) 运行仓库主机实验。
+4. 进入 [共同基础](knowledge/01-foundations/index.md)。
+5. 选择 [MCU/RTOS](knowledge/02-mcu-baremetal/index.md) 或 [Embedded Linux/BSP](knowledge/04-embedded-linux/index.md) 作为第一条主线。
+
+有经验的读者可以直接挑战阶段门。跳过章节的依据是已有证据，而不是“以前看过类似内容”。
+
+## 课程结构
 
 ```text
-knowledge/
-├── 00-learning-path/        # 学习路线、环境准备、能力模型
-├── 01-foundations/          # C/C++、编译链接、硬件常识、数据手册
-├── 02-mcu-baremetal/        # MCU、启动、外设、Bootloader、OTA、低功耗
-├── 03-rtos/                 # FreeRTOS/RT-Thread、任务、同步、工程实践
-├── 04-embedded-linux/       # U-Boot、Kernel、DTS、驱动模型、RootFS
-├── 05-network-iot/          # UART/CAN/TCP/IP/MQTT/BLE/LoRa、安全、OTA
-├── 06-debug-optimization/   # GDB/OpenOCD、仪器、性能、功耗、故障案例
-├── 07-architecture-projects/# 工程架构、BSP、项目实战、CI、量产发布
-├── 08-career-interview/     # 面试题库、简历、成长路线
-├── 09-trends-advanced/      # 中间件、GUI、TinyML、安全可靠性
-├── resources/               # 书籍、工具、社区和资料管理
-└── templates/               # 教程和项目模板
+                                  +-> MCU 裸机 -> RTOS ---------+
+学习方法 -> 共同基础 -------------+                               |
+            C / CPU / 构建 / 硬件 +-> Embedded Linux / BSP -----+-> 产品交付
+                                  |                               |
+                                  +-> 网络 / 存储 / 安全 / OTA ---+
+
+贯穿全程：调试、测试、可靠性、功耗、可观测性、工具链和工程表达
 ```
 
-## 推荐学习顺序
+### 共同基础
 
-1. [学习路线总览](knowledge/00-learning-path/index.md)
-2. [如何把本教程学深](knowledge/00-learning-path/deep-learning-method.md)
-3. [嵌入式工程环境准备](knowledge/00-learning-path/environment.md)
-4. [C 语言与内存模型](knowledge/01-foundations/c-language-memory.md)
-5. [编译、链接与固件镜像](knowledge/01-foundations/compile-link-firmware.md)
-6. [硬件基础与数据手册阅读](knowledge/01-foundations/hardware-basics.md)
-7. [MCU 启动流程与最小系统](knowledge/02-mcu-baremetal/mcu-startup.md)
-8. [寄存器与外设驱动方法](knowledge/02-mcu-baremetal/peripheral-driver.md)
-9. [Bootloader 与 OTA 基础](knowledge/02-mcu-baremetal/bootloader-ota.md)
-10. [低功耗设计](knowledge/02-mcu-baremetal/low-power.md)
-11. [RTOS 核心机制](knowledge/03-rtos/rtos-core.md)
-12. [RTOS 工程实践](knowledge/03-rtos/rtos-engineering.md)
-13. [嵌入式 Linux 全链路](knowledge/04-embedded-linux/linux-system.md)
-14. [Linux 驱动模型与调试](knowledge/04-embedded-linux/linux-driver-model.md)
-15. [网络与物联网协议](knowledge/05-network-iot/iot-protocols.md)
-16. [IoT 安全与设备生命周期](knowledge/05-network-iot/iot-security.md)
-17. [调试、优化与故障定位](knowledge/06-debug-optimization/debugging.md)
-18. [典型故障案例库](knowledge/06-debug-optimization/fault-cases.md)
-19. [嵌入式项目架构](knowledge/07-architecture-projects/project-architecture.md)
-20. [综合项目：环境监测节点](knowledge/07-architecture-projects/project-environment-node.md)
-21. [量产、测试与发布](knowledge/07-architecture-projects/production-release.md)
-22. [面试题库](knowledge/08-career-interview/question-bank.md)
+- [C 语言与内存模型](knowledge/01-foundations/c-language-memory.md)
+- [嵌入式 C++](knowledge/01-foundations/embedded-cpp.md)
+- [CPU、内存映射与并发](knowledge/01-foundations/cpu-memory-concurrency.md)
+- [编译、链接与固件镜像](knowledge/01-foundations/compile-link-firmware.md)
+- [硬件基础](knowledge/01-foundations/hardware-basics.md)
+- [数据手册与原理图方法](knowledge/01-foundations/datasheet-schematic-method.md)
 
-扩展专题建议按需穿插：
+### MCU/RTOS 路线
 
-- [嵌入式能力矩阵](knowledge/00-learning-path/competency-matrix.md)
-- [如何把本教程学深](knowledge/00-learning-path/deep-learning-method.md)
-- [数据手册与原理图阅读方法](knowledge/01-foundations/datasheet-schematic-method.md)
+- [MCU 启动与最小系统](knowledge/02-mcu-baremetal/mcu-startup.md)
 - [时钟、中断与 DMA](knowledge/02-mcu-baremetal/clock-interrupt-dma.md)
+- [寄存器与外设驱动](knowledge/02-mcu-baremetal/peripheral-driver.md)
+- [裸机架构](knowledge/02-mcu-baremetal/baremetal-architecture.md)
 - [传感器与执行器](knowledge/02-mcu-baremetal/sensor-actuator.md)
-- [RTOS 移植与配置](knowledge/03-rtos/rtos-porting-config.md)
+- [RTOS 核心、移植与工程实践](knowledge/03-rtos/index.md)
+- [低功耗](knowledge/02-mcu-baremetal/low-power.md) 与 [Bootloader/OTA](knowledge/02-mcu-baremetal/bootloader-ota.md)
+
+### Embedded Linux/BSP 路线
+
+- [主机到目标机开发闭环](knowledge/04-embedded-linux/linux-development-workflow.md)
+- [Embedded Linux 全链路](knowledge/04-embedded-linux/linux-system.md)
 - [BSP、RootFS 与系统构建](knowledge/04-embedded-linux/bsp-rootfs-build.md)
+- [Linux 驱动模型与调试](knowledge/04-embedded-linux/linux-driver-model.md)
 - [用户态服务与系统集成](knowledge/04-embedded-linux/userspace-service.md)
+
+### 产品工程
+
+- [应用层协议设计](knowledge/05-network-iot/application-protocol-design.md)
 - [连接状态机与弱网设计](knowledge/05-network-iot/connectivity-state-machine.md)
-- [现场诊断与可观测性](knowledge/06-debug-optimization/field-diagnostics.md)
-- [项目阶梯](knowledge/07-architecture-projects/project-ladder.md)
-- [工具链、构建与 CI](knowledge/07-architecture-projects/toolchain-ci.md)
-- [岗位路线与能力准备](knowledge/08-career-interview/role-roadmap.md)
-- [进阶专题](knowledge/09-trends-advanced/index.md)
-- [资源索引](knowledge/resources/index.md)
+- [IoT 安全与设备生命周期](knowledge/05-network-iot/iot-security.md)
+- [调试、测试与可观测性](knowledge/06-debug-optimization/index.md)
+- [需求、风险与证据追踪](knowledge/07-architecture-projects/requirements-risk.md)
+- [项目架构、CI、量产与发布](knowledge/07-architecture-projects/index.md)
 
-## 阶段产出
+## 可运行实验
 
-| 阶段 | 建议产出 |
-|---|---|
-| 基础阶段 | 一份内存布局笔记、一份数据手册摘录、一份 map 文件分析 |
-| MCU 阶段 | UART/I2C/SPI/ADC/DMA 驱动实验、Bootloader 跳转实验、低功耗测量记录 |
-| RTOS 阶段 | 多任务环境监测程序、任务栈统计、队列满和看门狗故障注入报告 |
-| Linux 阶段 | 可启动镜像、DTS 修改记录、一个 platform 或 I2C 驱动 |
-| IoT 阶段 | MQTT 上报状态机、断线重连、OTA 和安全设计 |
-| 工程阶段 | 项目架构图、产测清单、发布包、面试项目复盘 |
-| 进阶阶段 | 文件系统方案、GUI demo、TinyML demo、安全启动/可靠性设计 |
-
-## 每章学习方法
-
-每个主题建议按同一个节奏推进：
-
-1. 先看“概念边界”：知道这个东西解决什么问题，不解决什么问题。
-2. 再追“底层机制”：寄存器、时序、调度、内存、状态机或调用链。
-3. 再做“最小可运行路径”：用一个最小实验理解主流程。
-4. 然后做“故障注入”：主动制造异常，记录日志、波形、寄存器或 dump。
-5. 最后做“复盘输出”：画图、写接口、补故障清单，回答设计取舍。
-
-更具体的方法见 [如何把本教程学深](knowledge/00-learning-path/deep-learning-method.md)。
-
-## 站点发布
-
-本仓库包含基础 `mkdocs.yml`，后续可以直接用 MkDocs Material 发布：
+仓库提供三项主机实验，分别训练边界、协议解析和断电一致性：
 
 ```bash
-pip install mkdocs mkdocs-material mkdocs-awesome-pages-plugin
-mkdocs serve
+make -C labs test
 ```
 
-启动后访问 `http://127.0.0.1:8000`。
+| 实验 | 核心问题 |
+|---|---|
+| [ring-buffer](labs/ring-buffer/README.md) | 空满、wrap、不变量和模型对照 |
+| [byte-stream-parser](labs/byte-stream-parser/README.md) | 分片、粘连、畸形长度和有界失败 |
+| [host-config-journal](labs/host-config-journal/README.md) | Flash 模型、提交顺序和逐断电点恢复 |
 
-仓库也已包含 GitHub Actions：
+主机实验属于 E1 证据：适合验证纯逻辑和不变量，但不证明目标 CPU 原子性、DMA/cache、外设时序和电气行为。目标板与系统项目的补充验证见 [实验地图](knowledge/00-learning-path/labs-map.md)。
 
-- `.github/workflows/deploy-mkdocs.yml`
-- 推送到 `main` 时自动构建并部署到 GitHub Pages。
-- Pull Request 时只执行 `mkdocs build --strict` 构建检查，不部署。
-- 需要在 GitHub 仓库设置中启用 Pages，并选择 GitHub Actions 作为部署来源。
+## 综合项目
+
+- [项目阶梯](knowledge/07-architecture-projects/project-ladder.md)：共同基础后分为 MCU/RTOS 与 Linux/BSP 两条项目路线。
+- [环境监测节点](knowledge/07-architecture-projects/project-environment-node.md)：MCU/RTOS、传感器、网络、配置、低功耗与 OTA。
+- [Embedded Linux 边缘网关](knowledge/07-architecture-projects/project-linux-gateway.md)：BSP、驱动、systemd、存储、弱网、更新与现场诊断。
+
+项目完成不是功能截图，而是需求、架构、预算、原始证据、故障注入、构建、发布、回滚和残余风险组成的证据包。
+
+## 质量标准
+
+[criteria.md](criteria.md) 定义整套教程的上位质量标准，包括十二项质量属性、课程组织、单章/实验/项目契约、评估门禁和完成定义。
+
+站内配套方法：
+
+- [深度教程契约](knowledge/00-learning-path/depth-contract.md)
+- [系统思维](knowledge/00-learning-path/system-thinking.md)
+- [深度学习方法](knowledge/00-learning-path/deep-learning-method.md)
+- [教程质量矩阵](knowledge/00-learning-path/tutorial-quality-matrix.md)
+
+## 本地验证与预览
+
+安装文档依赖并严格构建：
+
+```bash
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/mkdocs build --strict
+```
+
+启动本地站点：
+
+```bash
+.venv/bin/mkdocs serve
+```
+
+默认访问 `http://127.0.0.1:8000`。
+
+CI 会同时执行 MkDocs 严格构建和全部主机实验。推送到 `main` 时由 `.github/workflows/deploy-mkdocs.yml` 部署 GitHub Pages；Pull Request 只构建和测试，不部署。

@@ -2,4 +2,6 @@ site/
 .cache/
 .venv/
 __pycache__/
-
+labs/*/build/
+labs/ring-buffer/test_ring_buffer
+labs/byte-stream-parser/test_stream_parser

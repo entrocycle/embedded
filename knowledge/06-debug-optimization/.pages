@@ -2,5 +2,6 @@ title: 06 调试与优化
 nav:
   - index.md
   - debugging.md
+  - testing-verification.md
   - field-diagnostics.md
   - fault-cases.md
